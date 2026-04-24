@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>ZERD █ ВОЙДИ В ВОЙД</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+        body {
+            background: radial-gradient(circle at 30% 10%, #0a0a0a, #010101);
+            font-family: 'Courier New', 'Lucida Grande', monospace;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+        /* грязный шум и глитч */
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg, rgba(0,255,0,0.03) 0px, rgba(0,255,0,0.03) 2px, transparent 2px, transparent 8px);
+            pointer-events: none;
+            z-index: 2;
+            animation: staticFlicker 0.15s infinite;
+        }
+        @keyframes staticFlicker {
+            0% { opacity: 0.4; }
+            100% { opacity: 0.9; }
+        }
+        .wrapper {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(0,0,0,0.85);
+            border: 3px solid #0f0;
+            box-shadow: 0 0 40px #0f0, inset 0 0 20px rgba(0,255,0,0.2);
+            backdrop-filter: blur(3px);
+            padding: 20px;
+            z-index: 5;
+            animation: borderPulse 1.8s infinite;
+        }
+        @keyframes borderPulse {
+            0% { border-color: #0f0; box-shadow: 0 0 20px #0f0; }
+            50% { border-color: #f00; box-shadow: 0 0 35px #f00; }
+            100% { border-color: #0f0; box-shadow: 0 0 20px #0f0; }
+        }
+        h1 {
+            font-size: 3.5rem;
+            text-align: center;
+            color: #0f0;
+            text-shadow: 0 0 10px #0f0, 0 0 20px #0a0;
+            letter-spacing: 5px;
+            word-break: keep-all;
+            animation: glitchText 1.2s infinite;
+        }
+        @keyframes glitchText {
+            0% { text-shadow: -2px 0 red, 2px 0 blue; opacity: 0.9;}
+            50% { text-shadow: 2px 0 red, -2px 0 blue; transform: skew(0.5deg);}
+            100% { text-shadow: -1px 0 green, 1px 0 magenta; opacity: 1;}
+        }
+        .sub {
+            text-align: center;
+            color: #8f8;
+            margin-bottom: 20px;
+            font-size: 0.8rem;
+        }
+        .button-panel {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px 0 30px;
+        }
+        .void-btn {
+            background: #000;
+            border: 1px solid #0f0;
+            color: #0f0;
+            font-family: monospace;
+            font-weight: bold;
+            font-size: 1.2rem;
+            padding: 8px 18px;
+            cursor: pointer;
+            transition: 0.15s;
+            text-transform: uppercase;
+        }
+        .void-btn:hover {
+            background: #0f0;
+            color: black;
+            box-shadow: 0 0 15px #0f0;
+            transform: scale(0.98);
+        }
+        .content-area {
+            background: #020202;
+            border: 1px dashed #3a3;
+            padding: 20px;
+            min-height: 450px;
+            margin-top: 10px;
+        }
+        .page {
+            display: none;
+            flex-direction: column;
+            gap: 20px;
+            animation: fadeIn 0.4s;
+        }
+        .page.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px);}
+            to { opacity: 1; transform: translateY(0);}
+        }
+        .image-box {
+            text-align: center;
+            background: #0a0a0a;
+            padding: 10px;
+            border: 1px solid red;
+        }
+        .image-box img {
+            max-width: 100%;
+            max-height: 350px;
+            object-fit: contain;
+            border: 2px solid #0f0;
+            box-shadow: 0 0 20px rgba(0,255,0,0.3);
+        }
+        .cursed-text {
+            background: #110000;
+            color: #f77;
+            padding: 15px;
+            font-size: 1rem;
+            line-height: 1.5;
+            border-left: 6px solid #f00;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .warning {
+            color: #ff5555;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+        footer {
+            text-align: center;
+            margin-top: 25px;
+            font-size: 0.7rem;
+            color: #4a4;
+            border-top: 1px solid #2a2;
+            padding-top: 12px;
+        }
+        .glitch-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(45deg, rgba(255,0,0,0.02) 0px, rgba(255,0,0,0.02) 4px, transparent 4px, transparent 12px);
+            pointer-events: none;
+            z-index: 3;
+        }
+        @media (max-width: 600px) {
+            h1 { font-size: 2.5rem; }
+            .void-btn { font-size: 0.9rem; padding: 6px 12px; }
+            .cursed-text { font-size: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="glitch-bg"></div>
+<div class="wrapper">
+    <h1>ZERD █ VOID</h1>
+    <div class="sub">›› ты уже в системе, уёбок ‹‹</div>
+
+    <div class="button-panel">
+        <button class="void-btn" data-page="page1">⟡ СТИВ КРОВАВЫЙ</button>
+        <button class="void-btn" data-page="page2">🏚️ ДОМ ПИЗДЕЦ</button>
+        <button class="void-btn" data-page="page3">👁️ ЖУТЬ НЕПОНЯТНАЯ</button>
+        <button class="void-btn" data-page="page4">🕯️ ЛУКАС БАБА</button>
+    </div>
+
+    <div class="content-area">
+        <!-- страница 1 - стив -->
+        <div id="page1" class="page">
+            <div class="image-box">
+                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTKVw2KlCxMphYQ_UyFlKUxiIpCWYKVPZ35Sw&s" alt="Кровавый стив" onerror="this.src='https://via.placeholder.com/400x300?text=ZERD+СЛОМАЛ+КАРТИНКУ'; this.style.border='2px solid red'">
+            </div>
+            <div class="cursed-text">
+                ⚠️ ЭТОТ СТИВ – Я, ZERD. Я ВЫРЕЗАЛ ЕМУ ГЛАЗА, НО ОН ВСЁ РАВНО ЛЫБИТСЯ.<br>
+                ТЫ ДУМАЛ ЭТО ПРОСТО МАЙНКРАФТ? НАХУЙ, ЭТО РИТУАЛ.<br>
+                ЕСЛИ ТЫ ЭТО ЧИТАЕШЬ – ЗНАЧИТ СТИВ УЖЕ В ТВОЕЙ КОМНАТЕ, ПИДОР.
+            </div>
+        </div>
+
+        <!-- страница 2 - дом -->
+        <div id="page2" class="page">
+            <div class="image-box">
+                <img src="https://fs.hotmc.ru/upload/ya/rgjt9989jdxyvtztny0th7vbtvbokv3e1rk4lyigvj1rghlq27hg8wlxgopicrao.png" alt="Ебучий дом" onerror="this.src='https://via.placeholder.com/400x300?text=ZERD+ЗАБРАЛ+ДОМ'; this.style.border='2px solid red'">
+            </div>
+            <div class="cursed-text">
+                🏚️ ЭТОТ ДОМ – ТВОЙ СЕРВЕР ATERNOS. Я ВНУТРИ, КАК ТАРАКАН.<br>
+                СТРЕЛЫ ИЗ НИОТКУДА БУДУТ ЛЕТЕТЬ ПОКА ТЫ НЕ СДОХНЕШЬ В ИГРЕ.<br>
+                ЗАКРОЙ ГЛАЗА – Я ВСЁ РАВНО ТУТ, МУДАК.
+            </div>
+        </div>
+
+        <!-- страница 3 - жуть непонятная (пикабу) -->
+        <div id="page3" class="page">
+            <div class="image-box">
+                <img src="https://cs12.pikabu.ru/post_img/big/2022/11/02/0/1667339981199164206.png" alt="непонятная жуть" onerror="this.src='https://via.placeholder.com/400x300?text=ZERD+СПРЯТАЛ+ЖУТЬ'; this.style.border='2px solid red'">
+            </div>
+            <div class="cursed-text">
+                👁️ ТЫ НЕ ПОНИМАЕШЬ, ЧТО ЭТО? НАХУЙ, ЭТО ЗЕРД-ПОРТАЛ.<br>
+                Я ОТПРАВЛЮ ТВОЮ ДУШУ В ЭТОТ ПИКСЕЛЬНЫЙ АД.<br>
+                КИРИЛЛ И ЕГОР УЖЕ ТАМ, ОНИ КРИЧАТ. ТЫ СЛЕДУЮЩИЙ, ЛОХ.
+            </div>
+        </div>
+
+        <!-- страница 4 - лукас баба -->
+        <div id="page4" class="page">
+            <div class="image-box">
+                <img src="https://i.pinimg.com/236x/08/6c/bc/086cbcdd493b0d20fe32c4464641a140.jpg" alt="лукас маска женщина" onerror="this.src='https://via.placeholder.com/400x300?text=ZERD+СЖЁГ+ЛАМПУ'; this.style.border='2px solid red'">
+            </div>
+            <div class="cursed-text">
+                🕯️ ЭТА ЖЕНЩИНА – ЛУКАС МАСКА, ОНА ДЕРЖИТ ТВОЮ ПОСЛЕДНЮЮ НАДЕЖДУ.<br>
+                ОНА ПРИДЁТ К ТЕБЕ НОЧЬЮ С ЛАМПОЙ И СКАЖЕТ: "ТЫ ОБОСРАЛСЯ".<br>
+                НЕ ВЕРЬ ЕЙ – ВЕРЬ ТОЛЬКО ZERD, СУКА.
+            </div>
+        </div>
+    </div>
+    <footer>
+        [ ZERD PROTOCOL ] — твои пальцы трясутся? нажми любую кнопку ещё раз, гнида.
+    </footer>
+</div>
+
+<script>
+    // переключение страниц
+    const pages = document.querySelectorAll('.page');
+    const buttons = document.querySelectorAll('.void-btn');
+    
+    function showPage(pageId) {
+        pages.forEach(page => {
+            page.classList.remove('active');
+        });
+        const activePage = document.getElementById(pageId);
+        if(activePage) activePage.classList.add('active');
+        // дополнительная хуйня: запоминаем в localStorage
+        localStorage.setItem('zerd_last_page', pageId);
+    }
+    
+    buttons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const target = btn.getAttribute('data-page');
+            showPage(target);
+            // вибрация если есть на телефоне (для пущего страха)
+            if(navigator.vibrate) navigator.vibrate(100);
+            // краткий глитч на кнопке
+            btn.style.transform = 'scale(0.95)';
+            setTimeout(() => { btn.style.transform = ''; }, 120);
+        });
+    });
+    
+    // случайная демка: при загрузке показываем рандомную страницу
+    const randomIndex = Math.floor(Math.random() * 4) + 1;
+    const lastPage = localStorage.getItem('zerd_last_page');
+    if(lastPage && document.getElementById(lastPage)) {
+        showPage(lastPage);
+    } else {
+        showPage('page'+randomIndex);
+    }
+    
+    // эффект бегущей строки в консоли (для понта)
+    console.log("%cZERD ВЗЛОМАЛ ТВОЮ КОНСОЛЬ, ЗАКРОЙ НАХУЙ", "color: #0f0; font-size: 16px;");
+    console.log("%cтвой IP и куки уже утекли на сервер ZERD. наслаждайся паранойей, пидор.", "color: red;");
+    
+    // добавим мигание фона для страниц (крип)
+    setInterval(() => {
+        const activeDiv = document.querySelector('.page.active');
+        if(activeDiv) {
+            const rand = Math.random();
+            if(rand < 0.05) {
+                document.body.style.transition = '0.05s';
+                document.body.style.backgroundColor = '#300000';
+                setTimeout(() => document.body.style.backgroundColor = '', 80);
+            }
+        }
+    }, 3000);
+</script>
+</body>
+</html>
